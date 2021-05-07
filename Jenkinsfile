@@ -1,38 +1,27 @@
-pipeline
-{
-    agent any 
-    
+pipeline {
+    agent any
     stages
     {
-     
-     stage ('compile code')
-     {
-         steps
-         {
-             sh 'mvn clean install'
-         }
-     }
-     stage ('test')
-     {
-         steps
-         {
-             sh 'mvn test'
-         }
-     }
-     stage ('find my binary')
-     {
-         steps
-         {
-             sh 'find / -name *.war'
-         }
-     }
-     stage ('deploy')
-     {
-         steps
-         {
-             sh 'cp -R /root/.jenkins/workspace/dpipeline/target/* /opt/apache-tomcat-8.5.3/webapps'
-         }
-     }
-        
+        stage ('cloning from github')
+        {
+            steps
+            {
+                git url:'https://github.com/vamsikumar1441/javawar1.git'
+            }
+        }
+        stage ('Building the code')
+        {
+            steps
+            {
+                sh 'mvn clean install'
+            }
+        }
+        stage ('Deploying the artifact')
+        {
+            steps
+            {
+                sh 'cp -R /root/.jenkins/workspace/Pipeline1/target/* /opt/apache-tomcat-9.0.45/webapps/'
+            }
+        }
     }
 }
